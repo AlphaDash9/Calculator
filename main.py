@@ -47,23 +47,41 @@ class Operations :
         del work_list
         return ans
 
-    def display_history(self, date):
-        with open("operation_list.txt", "r") as reading_file :
-            if date == "all":
-                for line in reading_file :
-                    print(line)
-            else :
-                for line in reading_file :
-                    if date in line :
-                        print(line)
-                    else :
-                        continue
-
     def operation_storage(self) :
         with open("operation_list.txt", "a+") as operation_file :
             for keys, values in self.work_done.items() :
-                operation_file.write(f'{keys} : {values}, ')
-            operation_file.write('\n')
+                operation_file.write(f',{keys},{values[0]},{values[1]},')
+                operation_file.write('\n')
+    
+    def display_history(self, date):
+        with open("operation_list.txt", "r") as operation_file :
+            if date == "all":
+                for line in operation_file :
+                    if not line[0:1].isspace() :
+                        line_data = []
+                        for index, element in enumerate(line):
+                            if element == "," and index != len(line) and index != len(line) - 1 :
+                                value = line[index + 1 : line.find(",", index + 1, len(line))]
+                                line_data.append(value)
+                            else :
+                                pass
+                        print(f'Answer : {line_data[0]}, Operation : {line_data[1]}, Date : {line_data[2]}')
+                    else :
+                        continue
+                    
+            else :
+                for line in operation_file :
+                    if date in line :
+                        line_data = []
+                        for index, element in enumerate(line):
+                            if element == "," and index != len(line) and index != len(line) - 1 :
+                                value = line[index + 1 : line.find(",", index + 1, len(line))]
+                                line_data.append(value)
+                            else :
+                                pass       
+                        print(f'Answer : {line_data[0]}, Operation : {line_data[1]}, Date : {line_data[2]}')
+                    else :
+                        continue
 
 test = Operations()
 while True :
@@ -77,11 +95,11 @@ while True :
                 input_data = int(input())
                 items_list.append(input_data)
                 del input_data
-            print(test.addition(items_list))
+            print("The answer is", test.addition(items_list))
         elif work == 2:
             num1 = int(input())
             num2 = int(input())
-            print(test.substraction(num1, num2))
+            print("The answer is", test.substraction(num1, num2))
         elif work == 3:
             items = int(input("How many numbers you want to multiply : "))
             items_list = []
@@ -89,11 +107,11 @@ while True :
                 input_data = int(input())
                 items_list.append(input_data)
                 del input_data
-            print(test.multiply(items_list))
+            print("The answer is", test.multiply(items_list))
         elif work == 4:
             num1 = int(input())
             num2 = int(input())
-            print(test.divide(num1, num2))
+            print("The answer is", test.divide(num1, num2))
         else :
             break
     elif action == 2:
